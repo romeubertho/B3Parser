@@ -22,12 +22,17 @@ class MarketData:
         self.ftp.login()
 
     def get_futures(self, date, path=os.getcwd()):
+        self.ftp.cwd('../')
         self.ftp.cwd(b3FUTURES)
         filename = b3TRADE+date+'.zip'
-        print('Downloading ',filename)
+        print('Downloading',filename)
         path +='/data/futures/'+filename
-        res = self.ftp.retrbinary("RETR " + filename, open(path, 'wb').write)
-        print(res)
+        filesFTP=self.ftp.nlst()
+        if filename in filesFTP:
+            res = self.ftp.retrbinary("RETR " + filename, open(path, 'wb').write)
+            print(res)
+        else:
+            print(filename,'not found!')
 
     def get_options(self, date=''):
         pass
